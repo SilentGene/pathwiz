@@ -2,6 +2,9 @@
 
 A web app to create simplified pathway visualizations for environmental microbiology.
 
+UI preview:
+![Pathwiz Screenshot](preview.jpg)
+
 ## The Origin Story (aka My Pain Point)
 
 Every time I get my hands on fresh gene annotations, I face the same existential crisis: mapping those genes onto massive pathway diagrams. It's like trying to find specific LEGO pieces in a giant bin... while blindfolded... in the dark.
