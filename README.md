@@ -11,7 +11,7 @@ Every time I get my hands on fresh gene annotations, I face the same existential
 
 Take methanogenesis, for example. Dozens of genes functioning in this pathway, giving me a headache everytime. 🌀
 
-KEGG provides incredibly comprehensive pathway maps, and I'm genuinely grateful for their work. But let's be honest: their complexity level often lands somewhere between "mildly terrifying" and "please make it stop." 
+No doubt, KEGG provides incredibly comprehensive pathway maps, and I'm genuinely grateful for their work. But let's be honest: their complexity level often lands somewhere between "mildly terrifying" and "please make it stop." 
 
 During one of my presentations, I proudly showed my supervisor how I'd mapped our genes onto a KEGG pathway. His response?
 
@@ -45,6 +45,11 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 ## Want to Contribute or Request a Pathway?
 
 Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and let me know! I'll do my best to make it happen. Hand-drawing SVG pathway maps is... not trivial. It turns out making aesthetically pleasing biochemical diagrams is harder than actual biochemistry. Who knew? 😅
+
+## Technical Stack
+
+- HTML, CSS, JavaScript
+- D3.js for data-driven documents and SVG manipulation
 
 .
 🧙‍♂️🧬
