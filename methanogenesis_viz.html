@@ -17,7 +17,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: "Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue,sans-serif";
       height: 100vh;
       width: 100vw;
       display: flex;
@@ -90,7 +90,7 @@
       letter-spacing: 1px;
     }
 
-    textarea {
+    textarea, input[type="text"] {
       width: 100%;
       box-sizing: border-box;
       padding: 15px;
@@ -100,13 +100,21 @@
       font-size: 14px;
       color: #1E293A;
       background: #fdfdfd;
-      resize: vertical;
-      min-height: 120px;
       transition: all 0.3s ease;
       outline: none;
     }
 
-    textarea:focus {
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      font-family: "Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue,sans-serif";
+    }
+
+    textarea:focus, input[type="text"]:focus {
       border-color: var(--primary-color);
       background: #fff;
       box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
@@ -261,6 +269,11 @@
     </div>
 
     <div class="input-group">
+      <label for="titleInput">Figure Title</label>
+      <input type="text" id="titleInput" placeholder="(Optional)" oninput="updateTitle()">
+    </div>
+
+    <div class="input-group">
       <label for="koInput">KO Identifiers</label>
       <textarea id="koInput" placeholder="e.g. K00169, K00200&#10;Paste your list here..."></textarea>
     </div>
@@ -316,6 +329,19 @@
 <script>
 // SVG init
 const svg = d3.select("#svg");
+
+// Title element (initially empty)
+const titleNode = svg.append("text")
+  .attr("id", "svg-title")
+  .attr("x", 10) // Left aligned
+  .attr("y", 30)
+  .attr("text-anchor", "start")
+  .attr("font-family", "Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif")
+  .attr("font-size", "22px")
+  .attr("font-weight", "700")
+  .attr("fill", "#1E293A")
+  .text("");
+
 const g = svg.append("g");
 
 // Arrows
@@ -513,6 +539,11 @@ drawPath({ d: "M472.68,279.27c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21
 drawPath({ d: "M457.32,329.19c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange }); //
 
 // Logic
+window.updateTitle = function() {
+  const val = document.getElementById("titleInput").value;
+  d3.select("#svg-title").text(val);
+}
+
 window.highlight = function() {
   const raw = document.getElementById("koInput").value.toUpperCase();
   const tokens = raw.split(/[\s,;]+/).map(t => t.trim()).filter(Boolean);

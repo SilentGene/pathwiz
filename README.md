@@ -1,5 +1,4 @@
 # Pathwiz
----
 
 A web app to create simplified pathway visualizations for environmental microbiology.
 
@@ -44,5 +43,5 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 
 Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and let me know! I'll do my best to make it happen. Hand-drawing SVG pathway maps is... not trivial. It turns out making aesthetically pleasing biochemical diagrams is harder than actual biochemistry. Who knew? 😅
 
----
+.
 🧙‍♂️🧬
