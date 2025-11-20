@@ -45,6 +45,12 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 - 🔜 Nitrogen cycle
 - 🔜 More pathways as time permits
 
+## Ambitious Goals (which might not happen) 🌕
+
+1.  **Visual Pathway Customization**: Allow users to customize pathway maps through a simple visual interface.
+2.  **Custom Enzyme IDs**: Allow users to map their own IDs to enzymes, moving beyond just KO IDs.
+3.  **And more...**
+
 ## Want to Contribute or Request a Pathway?
 
 Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and let me know! I'll do my best to make it happen. Hand-drawing SVG pathway maps is... not trivial. It turns out making aesthetically pleasing biochemical diagrams is harder than actual biochemistry. Who knew? 😅
