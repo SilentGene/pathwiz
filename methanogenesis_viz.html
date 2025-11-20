@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Methanogenesis Pathway Visualizer</title>
+  <title>Pathwiz - Methanogenesis</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     :root {
@@ -264,8 +264,8 @@
   <!-- 左侧边栏 -->
   <div class="sidebar">
     <div>
-      <h2>Pathway Map</h2>
-      <p class="description">Methanogenesis from CO2, Acetate, and Methyl-compounds.</p>
+      <h2>Pathwiz</h2>
+      <p class="description">Methanogenesis pathway from CO2, Acetate, and Methyl-compounds.</p>
     </div>
 
     <div class="input-group">
@@ -274,8 +274,11 @@
     </div>
 
     <div class="input-group">
-      <label for="koInput">KO Identifiers</label>
-      <textarea id="koInput" placeholder="e.g. K00169, K00200&#10;Paste your list here..."></textarea>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label for="koInput">KO Identifiers</label>
+        <button class="btn-text" onclick="fillExample()" style="font-size: 11px; padding: 0; color: var(--primary-color);">Fill Example</button>
+      </div>
+      <textarea id="koInput" placeholder="e.g. K00201, K22162&#10;IDs joined by commas or new lines..."></textarea>
     </div>
 
     <div class="button-group">
@@ -330,6 +333,32 @@
 // SVG init
 const svg = d3.select("#svg");
 
+// Data Definition
+const methanogenesisData = {
+  "Fwd": { label: "Fwd", ko: ["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260"] },
+  "Ftr": { label: "Ftr", ko: ["K00672"] },
+  "Mch": { label: "Mch", ko: ["K01499"] },
+  "Mtd_Hmd": { label: "Mtd/Hmd", ko: ["K13942", "K00319", "K00300", "K10714"] },
+  "Mer": { label: "Mer", ko: ["K00320"] },
+  "Mtr": { label: "Mtr", ko: ["K00580", "K00579", "K00578", "K00577", "K00582", "K00583", "K00584"] },
+  "Mcr": { label: "Mcr", ko: ["K00401", "K00402", "K03421", "K03422", "K00399"] },
+  "Ech": { label: "Ech", ko: ["K14086", "K14087", "K14088", "K14089", "K14090", "K14091"] },
+  "Fpo1": { label: "Fpo", ko: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
+  "Fpo2": { label: "Fpo", ko: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
+  "MvhADG_HdrABC": { label: "MvhADG-\nHdrABC", ko: ["K14126", "K14127", "K14128", "K22480", "K22481", "K22482", "K03388", "K03389", "K03390"] },
+  "CdhAB_CooSF": { label: "CdhAB\nCooSF", ko: ["K00192", "K00195", "K00196", "K00198"] },
+  "Fdh_Fdo_Fdw": { label: "Fdh/Fdo/Fdw", ko: ["K05299", "K15022", "K22516", "K00125", "K22515", "K00123", "K00124"] },
+  "Ack": { label: "Ack", ko: ["K00925"] },
+  "Pta": { label: "Pta", ko: ["K00625"] },
+  "CdhCDE": { label: "CdhCDE\n(ACDS)", ko: ["K00194", "K00193", "K00197"] },
+  "Acs": { label: "Acs", ko: ["K15023", "K14138"] },
+  "Mta": { label: "Mta", ko: ["K14080", "K04480", "K14081"] },
+  "MtmBC": { label: "MtmBC", ko: ["K16176", "K16177"] },
+  "MtbBC": { label: "MtbBC", ko: ["K16178", "K16179"] },
+  "MttBC": { label: "MttBC", ko: ["K14083", "K14084"] },
+  "MtbA": { label: "MtbA", ko: ["K14082"] }
+};
+
 // Title element (initially empty)
 const titleNode = svg.append("text")
   .attr("id", "svg-title")
@@ -361,7 +390,16 @@ markerColors.forEach(color => {
 });
 
 // Drawing Helpers
-function drawBox({id, x, y, w, h, label, cls, ko=[], enzyme=true}) {
+function drawBox(props) {
+  let {id, x, y, w, h, label, cls, ko=[], enzyme=true} = props;
+
+  // Merge with external data if available
+  if (typeof methanogenesisData !== 'undefined' && methanogenesisData[id]) {
+    const data = methanogenesisData[id];
+    if (data.label) label = data.label;
+    if (data.ko) ko = data.ko;
+  }
+
   const classes = [cls||''];
   if (enzyme) classes.push('enzyme');
   const ng = g.append("g").attr("class", classes.join(' ').trim()).attr("id", id);
@@ -477,23 +515,23 @@ drawLine({x1:528,y1:450,x2:528,y2:510,color:orange, arrow:false});
 drawLine({x1:528,y1:510,x2:498,y2:510,color:orange, arrow:false});
 [108, 162, 210, 262, 310, 358, 415, 528].forEach(y => drawRing({cx:360, cy:y, color:orange}));
 
-drawBox({id:"Fwd", x:339.51, y:126.78, w:40.04, h:22.49, label:"Fwd", cls:"st35", ko:["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260"], enzyme:true});
-drawBox({id:"Ftr", x:339.33, y:174.78, w:40.04, h:22.49, label:"Ftr", cls:"st35", ko:["K00672"], enzyme:true});
-drawBox({id:"Mch", x:336.58, y:226.33, w:42.78, h:22.49, label:"Mch", cls:"st35", ko:["K01499"], enzyme:true});
-drawBox({id:"Mtd_Hmd", x:326.53, y:274.6, w:68.56, h:22.49, label:"Mtd/Hmd", cls:"st35", ko:["K13942", "K00319", "K00300", "K10714"], enzyme:true});
-drawBox({id:"Mer", x:339.33, y:323.96, w:40.04, h:22.49, label:"Mer", cls:"st35", ko:["K00320"], enzyme:true});
-drawBox({id:"Mtr", x:339.33, y:372.78, w:40.04, h:22.49, label:"Mtr", cls:"st35", ko:["K00580", "K00579", "K00578", "K00577", "K00582", "K00583", "K00584"], enzyme:true});
-drawBox({id:"Mcr", x:339.15, y:459.99, w:40.04, h:22.49, label:"Mcr", cls:"st35", ko:["K00401", "K00402", "K03421", "K03422", "K00399"], enzyme:true});
+drawBox({id:"Fwd", x:339.51, y:126.78, w:40.04, h:22.49, cls:"st35", enzyme:true});
+drawBox({id:"Ftr", x:339.33, y:174.78, w:40.04, h:22.49, cls:"st35", enzyme:true});
+drawBox({id:"Mch", x:336.58, y:226.33, w:42.78, h:22.49, cls:"st35", enzyme:true});
+drawBox({id:"Mtd_Hmd", x:326.53, y:274.6, w:68.56, h:22.49, cls:"st35", enzyme:true});
+drawBox({id:"Mer", x:339.33, y:323.96, w:40.04, h:22.49, cls:"st35", enzyme:true});
+drawBox({id:"Mtr", x:339.33, y:372.78, w:40.04, h:22.49, cls:"st35", enzyme:true});
+drawBox({id:"Mcr", x:339.15, y:459.99, w:40.04, h:22.49, cls:"st35", enzyme:true});
 
-drawBox({id:"Ech", x:460.36, y:130.9,  w:28.32, h:15.91, label:"Ech", cls:"st34", ko:["K14086", "K14087", "K14088", "K14089", "K14090", "K14091"], enzyme:true});
-drawBox({id:"Fpo1",x:486.14, y:278.44, w:28.32, h:15.91, label:"Fpo", cls:"st34", ko:["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"], enzyme:true});
-drawBox({id:"Fpo2",x:469.68, y:327.8,  w:28.32, h:15.91, label:"Fpo", cls:"st34", ko:["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"], enzyme:true});
-drawBox({id:"MvhADG_HdrABC", x:488.33, y:459.99, w:71.3, h:32, label:"MvhADG-\nHdrABC", cls:"st35", ko:["K14126", "K14127", "K14128", "K22480", "K22481", "K22482", "K03388", "K03389", "K03390"], enzyme:true});
+drawBox({id:"Ech", x:460.36, y:130.9,  w:28.32, h:15.91, cls:"st34", enzyme:true});
+drawBox({id:"Fpo1",x:486.14, y:278.44, w:28.32, h:15.91, cls:"st34", enzyme:true});
+drawBox({id:"Fpo2",x:469.68, y:327.8,  w:28.32, h:15.91, cls:"st34", enzyme:true});
+drawBox({id:"MvhADG_HdrABC", x:488.33, y:459.99, w:71.3, h:32, cls:"st35", enzyme:true});
 
 drawLine({x1:254, y1:109, x2:354, y2:109, color:"#ef3d39"});
 drawLine({x1:496, y1:109, x2:367, y2:109, color:"#2ab34b"});
-drawBox({id:"CdhAB_CooSF", x:279.1, y:90, w:53.2, h:36.75, label:"CdhAB\nCooSF", cls:"st39", ko:["K00192", "K00195", "K00196", "K00198"], enzyme:true});
-drawBox({id:"Fdh_Fdo_Fdw", x:388.32, y:98, w:101.47, h:22.49, label:"Fdh/Fdo/Fdw", cls:"st38", ko:["K05299", "K15022", "K22516", "K00125", "K22515", "K00123", "K00124"], enzyme:true});
+drawBox({id:"CdhAB_CooSF", x:279.1, y:90, w:53.2, h:36.75, cls:"st39", enzyme:true});
+drawBox({id:"Fdh_Fdo_Fdw", x:388.32, y:98, w:101.47, h:22.49, cls:"st38", enzyme:true});
 drawRing({cx:255, cy:109, color:"#ef3d39"});
 drawRing({cx:501, cy:109, color:"#2ab34b"});
 
@@ -502,10 +540,10 @@ drawLine({x1:188,y1:251,x2:188,y2:349,color:red});
 drawLine({x1:192, y1:358, x2:355, y2:358, color:red});
 drawPath({ d: "M192,247c27.18,2.9,48.35,25.9,48.35,53.85,0,23.94-15.54,44.26-46,55", color: red, width: 2, arrow: true });
 [247, 298, 357].forEach(y => drawRing({cx:188, cy:y, color:red}));
-drawBox({id:"Ack", x:168.57, y:265.05, w:40.04, h:22.49, label:"Ack", cls:"st39", ko:["K00925"], enzyme:true});
-drawBox({id:"Pta", x:168.85, y:309.48, w:40.04, h:22.49, label:"Pta", cls:"st39", ko:["K00625"], enzyme:true});
-drawBox({id:"CdhCDE", x:235.48, y:348.64, w:66.37, h:33.46, label:"CdhCDE\n(ACDS)", cls:"st39", ko:["K00194", "K00193", "K00197"], enzyme:true});
-drawBox({id:"Acs", x:219, y:290, w:40.04, h:22.49, label:"Acs", cls:"st39", ko:["K15023", "K14138"], enzyme:true});
+drawBox({id:"Ack", x:168.57, y:265.05, w:40.04, h:22.49, cls:"st39", enzyme:true});
+drawBox({id:"Pta", x:168.85, y:309.48, w:40.04, h:22.49, cls:"st39", enzyme:true});
+drawBox({id:"CdhCDE", x:235.48, y:348.64, w:66.37, h:33.46, cls:"st39", enzyme:true});
+drawBox({id:"Acs", x:219, y:290, w:40.04, h:22.49, cls:"st39", enzyme:true});
 drawText({x:130, y:249, text:"acetate"});
 drawText({x:122, y:304, text:"acetyl-Pi"});
 drawText({x:110, y:363, text:"acetyl-CoA"});
@@ -519,11 +557,11 @@ drawLine({x1:147, y1:566, x2:240, y2:566, color:blue, arrow:false});
 drawLine({x1:240, y1:510, x2:240, y2:566, color:blue, arrow:false});
 drawLine({x1:300, y1:538, x2:300, y2:415, color:blue, arrow:false});
 drawLine({x1:300, y1:415, x2:354, y2:415, color:blue});
-drawBox({id:"Mta",   x:162.41, y:470.96, w:40.04, h:22.49, label:"Mta", cls:"st40", ko:["K14080", "K04480", "K14081"], enzyme:true});
-drawBox({id:"MtmBC", x:162.41, y:497.83, w:59.59, h:22.49, label:"MtmBC", cls:"st40", ko:["K16176", "K16177"], enzyme:true});
-drawBox({id:"MtbBC", x:162.41, y:525.26, w:59.59, h:22.49, label:"MtbBC", cls:"st40", ko:["K16178", "K16179"], enzyme:true});
-drawBox({id:"MttBC", x:162.41, y:552.68, w:58.59, h:22.49, label:"MttBC", cls:"st40", ko:["K14083", "K14084"], enzyme:true});
-drawBox({id:"MtbA",  x:250,  y:525.26, w:40.57, h:22.49, label:"MtbA", cls:"st40", ko:["K14082"], enzyme:true});
+drawBox({id:"Mta",   x:162.41, y:470.96, w:40.04, h:22.49, cls:"st40", enzyme:true});
+drawBox({id:"MtmBC", x:162.41, y:497.83, w:59.59, h:22.49, cls:"st40", enzyme:true});
+drawBox({id:"MtbBC", x:162.41, y:525.26, w:59.59, h:22.49, cls:"st40", enzyme:true});
+drawBox({id:"MttBC", x:162.41, y:552.68, w:58.59, h:22.49, cls:"st40", enzyme:true});
+drawBox({id:"MtbA",  x:250,  y:525.26, w:40.57, h:22.49, cls:"st40", enzyme:true});
 drawText({x:70, y:485, text:"methanol"});
 drawText({x:50, y:513, text:"methylamine"});
 drawText({x:40, y:541, text:"dimethylamine"});
@@ -534,9 +572,9 @@ drawPath({ d: "M405.81,293.51c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,2
 drawPath({ d: "M390.46,147.06c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
 drawPath({ d: "M389.91,343.97c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
 // Three orange curved paths (right)
-drawPath({ d: "M446.9,131.18c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange }); //
-drawPath({ d: "M472.68,279.27c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange }); //
-drawPath({ d: "M457.32,329.19c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange }); //
+drawPath({ d: "M446.9,131.18c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
+drawPath({ d: "M457.32,329.19c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
+drawPath({ d: "M472.68,279.27c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
 
 // Logic
 window.updateTitle = function() {
@@ -561,6 +599,12 @@ window.clearHighlight = function() {
   document.getElementById("koInput").value = "";
 }
 
+window.fillExample = function() {
+  // Example KOs for testing
+  const examples = ["K00200", "K00580", "K00401", "K03388", "K00925", "K16176"];
+  document.getElementById("koInput").value = examples.join(", ");
+}
+
 function bindKoInputHotkey() {
   const inp = document.getElementById('koInput');
   if (inp && !inp.dataset.bound) {
@@ -576,6 +620,14 @@ function bindKoInputHotkey() {
 bindKoInputHotkey();
 
 // --- Export Functions ---
+function getSafeFilename(ext) {
+  const base = "methanogenesis_pathway";
+  const val = document.getElementById("titleInput").value.trim();
+  if (!val) return base + "." + ext;
+  const safe = val.replace(/[\\/:*?"<>|]/g, "_");
+  return base + "-" + safe + "." + ext;
+}
+
 function getSvgData() {
   const svgEl = document.getElementById("svg");
   const serializer = new XMLSerializer();
@@ -589,14 +641,6 @@ function getSvgData() {
       source = source.replace('>', `><style>${styles}</style>`);
   }
   return source;
-}
-
-function getSafeFilename(ext) {
-  const base = "methanogenesis_pathway";
-  const val = document.getElementById("titleInput").value.trim();
-  if (!val) return base + "." + ext;
-  const safe = val.replace(/[\\/:*?"<>|]/g, "_");
-  return base + "-" + safe + "." + ext;
 }
 
 window.saveSvg = function() {

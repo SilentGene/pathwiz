@@ -6,7 +6,7 @@ UI preview:
 ![Pathwiz Screenshot](preview.jpg)
 
 ## Usage
-Download the html file in the repository and open it in your web browser (recommended: Chrome or Edge). You'll find out how to use it as it's simple enough.
+Download the html file in the repository and open it in your web browser (recommended: `Chrome` or `Edge`). You'll find out how to use it as it's simple enough.
 
 ## The Origin Story (aka My Pain Point)
 
@@ -16,7 +16,7 @@ Take methanogenesis, for example. Dozens of genes functioning in this pathway, g
 
 No doubt, [KEGG](https://www.genome.jp/kegg/) provides incredibly comprehensive pathway maps, and I'm genuinely grateful for their work. But let's be honest: their complexity level often lands somewhere between "mildly terrifying" and "please make it stop." 
 
-During one of my presentations, I proudly showed my supervisor how I'd mapped our genes onto a KEGG pathway. His response?
+During one of my presentations, I proudly showed my supervisor how I'd mapped our genes onto a KEGG pathway, like [this](https://www.kegg.jp/pathway/map00680+M00356). His response?
 
 -"This is... very confusing." 
 
@@ -45,7 +45,7 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 - 🔜 Nitrogen cycle
 - 🔜 More pathways as time permits
 
-## Ambitious Goals (which might not happen) 🌕
+## 🌕 Ambitious Goals (which might not happen)
 
 1.  **Visual Pathway Customization**: Allow users to customize pathway maps through a simple visual interface.
 2.  **Custom Enzyme IDs**: Allow users to map their own IDs to enzymes, moving beyond just KO IDs.
@@ -63,5 +63,4 @@ Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and le
 > [!NOTE]
 > Pathwiz doesn't rely on any server-side language like `PHP`, `Ruby`, or `Python`. You can just open the HTML file and the web app will run in your browser.
 
-.
-🧙‍♂️🧬
+...🧙‍♂️🧬
