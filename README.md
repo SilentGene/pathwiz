@@ -8,7 +8,7 @@ UI preview:
 ## Usage
 Download the html file in the repository and open it in your web browser (recommended: `Chrome` or `Edge`). You'll find out how to use it as it's simple enough.
 
-This is also hosted GitHub at: [https://silentgene.github.io/pathwiz/methanogenesis_viz.html](https://silentgene.github.io/pathwiz/methanogenesis_viz.html)
+This is also hosted on GitHub at: [https://silentgene.github.io/pathwiz/methanogenesis_viz.html](https://silentgene.github.io/pathwiz/methanogenesis_viz.html)
 
 ## My Pain Point
 
@@ -45,6 +45,9 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 - ✅ Methanogenesis pathway (done!)
 - 🔜 Sulfur cycle
 - 🔜 Nitrogen cycle
+- 🔜 TCA cycle
+- 🔜 Calvin cycle
+- 🔜 Wood-Ljungdahl pathway
 - 🔜 More pathways as time permits
 
 ## 🌕 Ambitious Goals (which might not happen)
