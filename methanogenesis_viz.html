@@ -492,18 +492,29 @@ function drawBox(props) {
 function drawText({x,y,text,cls="label"}) {
   const lines = String(text).split(/\n/);
   const el = g.append("text").attr("x", x).attr("y", y).attr("class", cls);
-  if (lines.length === 1) {
-    el.text(text);
-    return el;
-  }
+  
   let lineHeight = 14;
   if (cls && /big-label/.test(cls)) lineHeight = 18;
   else if (cls && /small-label/.test(cls)) lineHeight = 12;
+  
   el.attr("dominant-baseline", "middle");
+  
   lines.forEach((ln, i) => {
-    const t = el.append("tspan").text(ln).attr("x", x);
+    const t = el.append("tspan").attr("x", x);
     if (i === 0) t.attr("dy", `${-((lines.length - 1) / 2) * lineHeight}`);
     else t.attr("dy", `${lineHeight}`);
+    
+    const parts = ln.split(/(<sub>.*?<\/sub>)/g);
+    parts.forEach(part => {
+      if (part.startsWith("<sub>") && part.endsWith("</sub>")) {
+        t.append("tspan")
+         .attr("baseline-shift", "sub")
+         .attr("font-size", "0.7em")
+         .text(part.replace(/<\/?sub>/g, ""));
+      } else if (part) {
+        t.append("tspan").text(part);
+      }
+    });
   });
   return el;
 }
@@ -553,24 +564,24 @@ drawPill({x:298, y:43, w:129, h:32, label:"Hydrogenotrophic", cls:"st35"});
 drawPill({x:124, y:189, w:100, h:32, label:"Acetoclastic", cls:"st39"});
 drawPill({x:70, y:423, w:110, h:32, label:"Methylotrophic", cls:"st40"});
 
-drawText({x:345.36, y:97, text:"CO2", cls:"big-label"});
-drawText({x:220, y:116, text:"CO", cls:"big-label"});
-drawText({x:510, y:116, text:"formate", cls:"big-label"});
+drawText({x:345.36, y:92, text:"CO<sub>2</sub>", cls:"big-label"});
+drawText({x:219, y:110, text:"CO", cls:"big-label"});
+drawText({x:510, y:110, text:"formate", cls:"big-label"});
 drawText({x:370, y:169.21, text:"formyl-MF"});
 drawText({x:370, y:217, text:"formyl-H4SPt"});
 drawText({x:370, y:266, text:"methenyl-H4SPt"});
 drawText({x:370, y:316, text:"methylene-H4SPt"});
 drawText({x:370, y:365, text:"methyl-H4SPt"});
 drawText({x:370, y:419, text:"methyl-CoM"});
-drawText({x:342.07, y:560, text:"CH4", cls:"big-label"});
+drawText({x:342.07, y:550, text:"CH<sub>4</sub>", cls:"big-label"});
 drawText({x:419, y:452, text:"CoB-SH\nCoM-SH"});
 drawText({x:407, y:515, text:"CoM-S-S-CoB"});
 drawText({x:405, y:133, text:"Fdred2-", cls:"small-label"});
 drawText({x:397, y:152, text:"Fddox", cls:"small-label"});
-drawText({x:423, y:280, text:"F420H2", cls:"small-label"});
-drawText({x:408, y:300, text:"F420+2H2", cls:"small-label"});
-drawText({x:406, y:333, text:"F420H2", cls:"small-label"});
-drawText({x:399, y:349, text:"F420+2H2", cls:"small-label"});
+drawText({x:423, y:280, text:"F420H<sub>2</sub>", cls:"small-label"});
+drawText({x:408, y:300, text:"F420+2H<sub>2</sub>", cls:"small-label"});
+drawText({x:406, y:333, text:"F420H<sub>2</sub>", cls:"small-label"});
+drawText({x:399, y:349, text:"F420+2H<sub>2</sub>", cls:"small-label"});
 
 const orange = "#f8991d";
 drawLine({x1:360,y1:110,x2:360,y2:520,color:orange});
