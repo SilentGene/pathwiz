@@ -6,7 +6,7 @@ UI preview:
 ![Pathwiz Screenshot](preview.jpg)
 
 ## Usage
-Download the html file in the repository and open it in your web browser. You'll find out how to use it as it's simple enough.
+Download the html file in the repository and open it in your web browser (recommended: Chrome or Edge). You'll find out how to use it as it's simple enough.
 
 ## The Origin Story (aka My Pain Point)
 
@@ -14,7 +14,7 @@ Every time I get my hands on fresh gene annotations, I face the same existential
 
 Take methanogenesis, for example. Dozens of genes functioning in this pathway, giving me a headache everytime. 🌀
 
-No doubt, KEGG provides incredibly comprehensive pathway maps, and I'm genuinely grateful for their work. But let's be honest: their complexity level often lands somewhere between "mildly terrifying" and "please make it stop." 
+No doubt, [KEGG](https://www.genome.jp/kegg/) provides incredibly comprehensive pathway maps, and I'm genuinely grateful for their work. But let's be honest: their complexity level often lands somewhere between "mildly terrifying" and "please make it stop." 
 
 During one of my presentations, I proudly showed my supervisor how I'd mapped our genes onto a KEGG pathway. His response?
 
@@ -53,6 +53,9 @@ Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and le
 
 - HTML, CSS, JavaScript
 - D3.js for data-driven documents and SVG manipulation
+
+> [!NOTE]
+> Pathwiz doesn't rely on any server-side language like `PHP`, `Ruby`, or `Python`. You can just open the HTML file and the web app will run in your browser.
 
 .
 🧙‍♂️🧬
