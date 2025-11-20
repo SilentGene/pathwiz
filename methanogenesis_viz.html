@@ -302,7 +302,7 @@
 
     /* --- Grayscale Mode --- */
     #svg.grayscale-active { background-color: #fafafa; }
-    #svg.grayscale-active > g > g:not(.highlight),
+    #svg.grayscale-active > g > g:not(.highlight):not(.pill-group),
     #svg.grayscale-active > g > path,
     #svg.grayscale-active > g > line,
     #svg.grayscale-active > g > circle,
@@ -548,7 +548,7 @@ function drawPath({d, color, width=2, arrow=true}) {
 
 function drawPill({x, y, w, h, label, cls}) {
   const classes = ["pill", cls || ""].join(" ").trim();
-  const ng = g.append("g");
+  const ng = g.append("g").attr("class", "pill-group");
   ng.append("rect")
     .attr("x", x).attr("y", y)
     .attr("width", w).attr("height", h)

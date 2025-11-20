@@ -45,6 +45,9 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 - ✅ Methanogenesis pathway (done!)
 - 🔜 Sulfur cycle
 - 🔜 Nitrogen cycle
+- 🔜 TCA cycle
+- 🔜 Calvin cycle
+- 🔜 Wood-Ljungdahl pathway
 - 🔜 More pathways as time permits
 
 ## 🌕 Ambitious Goals (which might not happen)
