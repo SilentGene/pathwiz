@@ -47,9 +47,10 @@ I've built the first example using **methanogenesis** as a proof of concept. It 
 
 ## 🌕 Ambitious Goals (which might not happen)
 
-1.  **Visual Pathway Customization**: Allow users to customize pathway maps through a simple visual interface.
-2.  **Custom Enzyme IDs**: Allow users to map their own IDs to enzymes, moving beyond just KO IDs.
-3.  **And more...**
+1. **Visual Pathway Customization**: Allow users to customize pathway maps through a simple visual interface.
+2. **Custom Enzyme IDs**: Allow users to map their own IDs to enzymes, moving beyond just KO IDs.
+3. **Genome Database Integration**: Select a genome from a database to automatically highlight its annotated pathways.
+4. **And more...**
 
 ## Want to Contribute or Request a Pathway?
 

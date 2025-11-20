@@ -334,10 +334,10 @@
 
     <div class="input-group">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <label for="koInput">KO Identifiers</label>
+        <label for="kwInput">Keywords / Identifiers</label>
         <button class="btn-text" onclick="fillExample()" style="font-size: 11px; padding: 0; color: var(--primary-color);">Fill Example</button>
       </div>
-      <textarea id="koInput" placeholder="e.g. K00201, K22162&#10;IDs joined by commas or new lines..."></textarea>
+      <textarea id="kwInput" placeholder="e.g. K00201, gene_name...&#10;IDs joined by commas or new lines..."></textarea>
     </div>
 
     <div class="button-group">
@@ -402,28 +402,28 @@ const svg = d3.select("#svg");
 
 // Data Definition
 const methanogenesisData = {
-  "Fwd": { label: "Fwd", ko: ["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260"] },
-  "Ftr": { label: "Ftr", ko: ["K00672"] },
-  "Mch": { label: "Mch", ko: ["K01499"] },
-  "Mtd_Hmd": { label: "Mtd/Hmd", ko: ["K13942", "K00319", "K00300", "K10714"] },
-  "Mer": { label: "Mer", ko: ["K00320"] },
-  "Mtr": { label: "Mtr", ko: ["K00580", "K00579", "K00578", "K00577", "K00582", "K00583", "K00584"] },
-  "Mcr": { label: "Mcr", ko: ["K00401", "K00402", "K03421", "K03422", "K00399"] },
-  "Ech": { label: "Ech", ko: ["K14086", "K14087", "K14088", "K14089", "K14090", "K14091"] },
-  "Fpo1": { label: "Fpo", ko: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
-  "Fpo2": { label: "Fpo", ko: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
-  "MvhADG_HdrABC": { label: "MvhADG-\nHdrABC", ko: ["K14126", "K14127", "K14128", "K22480", "K22481", "K22482", "K03388", "K03389", "K03390"] },
-  "CdhAB_CooSF": { label: "CdhAB\nCooSF", ko: ["K00192", "K00195", "K00196", "K00198"] },
-  "Fdh_Fdo_Fdw": { label: "Fdh/Fdo/Fdw", ko: ["K05299", "K15022", "K22516", "K00125", "K22515", "K00123", "K00124"] },
-  "Ack": { label: "Ack", ko: ["K00925"] },
-  "Pta": { label: "Pta", ko: ["K00625"] },
-  "CdhCDE": { label: "CdhCDE\n(ACDS)", ko: ["K00194", "K00193", "K00197"] },
-  "Acs": { label: "Acs", ko: ["K15023", "K14138"] },
-  "Mta": { label: "Mta", ko: ["K14080", "K04480", "K14081"] },
-  "MtmBC": { label: "MtmBC", ko: ["K16176", "K16177"] },
-  "MtbBC": { label: "MtbBC", ko: ["K16178", "K16179"] },
-  "MttBC": { label: "MttBC", ko: ["K14083", "K14084"] },
-  "MtbA": { label: "MtbA", ko: ["K14082"] }
+  "Fwd": { label: "Fwd", kw: ["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260", "Fwd"] },
+  "Ftr": { label: "Ftr", kw: ["K00672", "Ftr"] },
+  "Mch": { label: "Mch", kw: ["K01499", "Mch"] },
+  "Mtd_Hmd": { label: "Mtd/Hmd", kw: ["K13942", "K00319", "K00300", "K10714"] },
+  "Mer": { label: "Mer", kw: ["K00320"] },
+  "Mtr": { label: "Mtr", kw: ["K00580", "K00579", "K00578", "K00577", "K00582", "K00583", "K00584"] },
+  "Mcr": { label: "Mcr", kw: ["K00401", "K00402", "K03421", "K03422", "K00399"] },
+  "Ech": { label: "Ech", kw: ["K14086", "K14087", "K14088", "K14089", "K14090", "K14091"] },
+  "Fpo1": { label: "Fpo", kw: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
+  "Fpo2": { label: "Fpo", kw: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
+  "MvhADG_HdrABC": { label: "MvhADG-\nHdrABC", kw: ["K14126", "K14127", "K14128", "K22480", "K22481", "K22482", "K03388", "K03389", "K03390"] },
+  "CdhAB_CooSF": { label: "CdhAB\nCooSF", kw: ["K00192", "K00195", "K00196", "K00198"] },
+  "Fdh_Fdo_Fdw": { label: "Fdh/Fdo/Fdw", kw: ["K05299", "K15022", "K22516", "K00125", "K22515", "K00123", "K00124"] },
+  "Ack": { label: "Ack", kw: ["K00925"] },
+  "Pta": { label: "Pta", kw: ["K00625"] },
+  "CdhCDE": { label: "CdhCDE\n(ACDS)", kw: ["K00194", "K00193", "K00197"] },
+  "Acs": { label: "Acs", kw: ["K15023", "K14138"] },
+  "Mta": { label: "Mta", kw: ["K14080", "K04480", "K14081"] },
+  "MtmBC": { label: "MtmBC", kw: ["K16176", "K16177"] },
+  "MtbBC": { label: "MtbBC", kw: ["K16178", "K16179"] },
+  "MttBC": { label: "MttBC", kw: ["K14083", "K14084"] },
+  "MtbA": { label: "MtbA", kw: ["K14082"] }
 };
 
 // Title element (initially empty)
@@ -458,13 +458,13 @@ markerColors.forEach(color => {
 
 // Drawing Helpers
 function drawBox(props) {
-  let {id, x, y, w, h, label, cls, ko=[], enzyme=true} = props;
+  let {id, x, y, w, h, label, cls, kw=[], enzyme=true} = props;
 
   // Merge with external data if available
   if (typeof methanogenesisData !== 'undefined' && methanogenesisData[id]) {
     const data = methanogenesisData[id];
     if (data.label) label = data.label;
-    if (data.ko) ko = data.ko;
+    if (data.kw) kw = data.kw;
   }
 
   const classes = [cls||''];
@@ -484,9 +484,9 @@ function drawBox(props) {
     if (i === 0) t.attr("dy", `${-((lines.length - 1) / 2) * lineHeight}`);
     else t.attr("dy", `${lineHeight}`);
   });
-  const tooltip = [label || id, ko.length ? ` [${ko.join(', ')}]` : ''].join('');
+  const tooltip = [label || id, kw.length ? ` [${kw.join(', ')}]` : ''].join('');
   ng.append('title').text(tooltip);
-  ng.attr("data-ko", ko.join(","));
+  ng.attr("data-kw", kw.join(","));
 }
 
 function drawText({x,y,text,cls="label"}) {
@@ -661,12 +661,12 @@ window.updateTitle = function() {
 }
 
 window.highlight = function() {
-  const raw = document.getElementById("koInput").value.toUpperCase();
+  const raw = document.getElementById("kwInput").value.toUpperCase();
   const tokens = raw.split(/[\s,;]+/).map(t => t.trim()).filter(Boolean);
   g.selectAll(".highlight").classed("highlight", false);
   if (!tokens.length) return;
   g.selectAll("g.enzyme").each(function() {
-    const k = (this.getAttribute("data-ko")||"").toUpperCase().split(",").map(s=>s.trim()).filter(Boolean);
+    const k = (this.getAttribute("data-kw")||"").toUpperCase().split(",").map(s=>s.trim()).filter(Boolean);
     const match = k.some(v => tokens.includes(v));
     if (match) d3.select(this).classed("highlight", true);
   });
@@ -674,13 +674,13 @@ window.highlight = function() {
 
 window.clearHighlight = function() {
   g.selectAll(".highlight").classed("highlight", false);
-  document.getElementById("koInput").value = "";
+  document.getElementById("kwInput").value = "";
 }
 
 window.fillExample = function() {
-  // Example KOs for testing
-  const examples = ["K00200", "K00580", "K00401", "K03388", "K00925", "K16176"];
-  document.getElementById("koInput").value = examples.join(", ");
+  // Example Keywords for testing
+  const examples = ["K00200", "K00580", "K00401", "K03388", "K00925", "Ftr"];
+  document.getElementById("kwInput").value = examples.join(", ");
 }
 
 window.toggleGrayscale = function() {
@@ -688,8 +688,8 @@ window.toggleGrayscale = function() {
   d3.select("#svg").classed("grayscale-active", cb.checked);
 }
 
-function bindKoInputHotkey() {
-  const inp = document.getElementById('koInput');
+function bindKwInputHotkey() {
+  const inp = document.getElementById('kwInput');
   if (inp && !inp.dataset.bound) {
     inp.addEventListener('keydown', function(e){
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
@@ -700,7 +700,7 @@ function bindKoInputHotkey() {
     inp.dataset.bound = '1';
   }
 }
-bindKoInputHotkey();
+bindKwInputHotkey();
 
 // --- Export Functions ---
 function getSafeFilename(ext) {
