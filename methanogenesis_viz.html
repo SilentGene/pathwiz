@@ -17,7 +17,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: "Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue,sans-serif";
+      font-family: "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
       height: 100vh;
       width: 100vw;
       display: flex;
@@ -111,7 +111,7 @@
 
     input[type="text"] {
       padding: 12px;
-      font-family: "Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue,sans-serif";
+      font-family: "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     }
 
     textarea:focus, input[type="text"]:focus {
@@ -591,6 +591,14 @@ function getSvgData() {
   return source;
 }
 
+function getSafeFilename(ext) {
+  const base = "methanogenesis_pathway";
+  const val = document.getElementById("titleInput").value.trim();
+  if (!val) return base + "." + ext;
+  const safe = val.replace(/[\\/:*?"<>|]/g, "_");
+  return base + "-" + safe + "." + ext;
+}
+
 window.saveSvg = function() {
   const source = getSvgData();
   const blob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
@@ -598,7 +606,7 @@ window.saveSvg = function() {
   
   const link = document.createElement("a");
   link.href = url;
-  link.download = "methanogenesis_pathway.svg";
+  link.download = getSafeFilename("svg");
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -633,7 +641,7 @@ function saveJpg() {
       ctx.drawImage(img, 0, 0, w, h);
       
       const link = document.createElement("a");
-      link.download = "methanogenesis_pathway.jpg";
+      link.download = getSafeFilename("jpg");
       link.href = canvas.toDataURL("image/jpeg", 0.9);
       document.body.appendChild(link);
       link.click();
