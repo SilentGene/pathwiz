@@ -337,7 +337,7 @@
         <label for="kwInput">Keywords / Identifiers</label>
         <button class="btn-text" onclick="fillExample()" style="font-size: 11px; padding: 0; color: var(--primary-color);">Fill Example</button>
       </div>
-      <textarea id="kwInput" placeholder="e.g. K00201, gene_name...&#10;IDs joined by commas or new lines..."></textarea>
+      <textarea id="kwInput" placeholder="e.g. K00201, Mtt, McrA...&#10;IDs joined by commas or new lines..."></textarea>
     </div>
 
     <div class="button-group">
@@ -382,9 +382,14 @@
          <span class="btn-icon" style="width: 14px; height: 14px; margin-right: 4px;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bug" aria-hidden="true"><path d="M12 20v-9"></path><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z"></path><path d="M14.12 3.88 16 2"></path><path d="M21 21a4 4 0 0 0-3.81-4"></path><path d="M21 5a4 4 0 0 1-3.55 3.97"></path><path d="M22 13h-4"></path><path d="M3 21a4 4 0 0 1 3.81-4"></path><path d="M3 5a4 4 0 0 0 3.55 3.97"></path><path d="M6 13H2"></path><path d="m8 2 1.88 1.88"></path><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13"></path></svg></span>
          Toggle SVG Debug Grid
        </button>
-       <div style="font-size: 12px; color:#aaa; margin-bottom:5px; margin-top: 5px; font-weight: 600;">
-          &copy; 2025 Heyu Lin
-       </div>
+       <a href="https://github.com/SilentGene/pathwiz" target="_blank" class="btn-text" style="display: inline-flex; align-items: center; text-decoration: none; margin-top: 5px;">
+         <span class="btn-icon" style="width: 16px; height: 16px; margin-right: 6px;">
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+           </svg>
+         </span>
+         &copy; 2025 Heyu Lin
+       </a>
 
     </div>
   </div>
@@ -402,28 +407,28 @@ const svg = d3.select("#svg");
 
 // Data Definition
 const methanogenesisData = {
-  "Fwd": { label: "Fwd", kw: ["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260", "Fwd"] },
+  "Fwd": { label: "Fwd", kw: ["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260", "FwdA"] },
   "Ftr": { label: "Ftr", kw: ["K00672", "Ftr"] },
   "Mch": { label: "Mch", kw: ["K01499", "Mch"] },
-  "Mtd_Hmd": { label: "Mtd/Hmd", kw: ["K13942", "K00319", "K00300", "K10714"] },
-  "Mer": { label: "Mer", kw: ["K00320"] },
-  "Mtr": { label: "Mtr", kw: ["K00580", "K00579", "K00578", "K00577", "K00582", "K00583", "K00584"] },
-  "Mcr": { label: "Mcr", kw: ["K00401", "K00402", "K03421", "K03422", "K00399"] },
+  "Mtd_Hmd": { label: "Mtd/Hmd", kw: ["K13942", "K00319", "K00300", "K10714", "MtdA", "HmdA"] },
+  "Mer": { label: "Mer", kw: ["K00320", "Mer"] },
+  "Mtr": { label: "Mtr", kw: ["K00580", "K00579", "K00578", "K00577", "K00582", "K00583", "K00584", "MtrA"] },
+  "Mcr": { label: "Mcr", kw: ["K00401", "K00402", "K03421", "K03422", "K00399", "McrA"] },
   "Ech": { label: "Ech", kw: ["K14086", "K14087", "K14088", "K14089", "K14090", "K14091"] },
   "Fpo1": { label: "Fpo", kw: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
   "Fpo2": { label: "Fpo", kw: ["K22158", "K22159", "K22160", "K22161", "K22162", "K22163", "K22164", "K22165", "K22166", "K22167", "K22168", "K22169", "K22170"] },
   "MvhADG_HdrABC": { label: "MvhADG-\nHdrABC", kw: ["K14126", "K14127", "K14128", "K22480", "K22481", "K22482", "K03388", "K03389", "K03390"] },
-  "CdhAB_CooSF": { label: "CdhAB\nCooSF", kw: ["K00192", "K00195", "K00196", "K00198"] },
+  "CdhAB_CooSF": { label: "CdhAB\nCooSF", kw: ["K00192", "K00195", "K00196", "K00198", "CdhA", "CdhB", "CooS", "CooF"] },
   "Fdh_Fdo_Fdw": { label: "Fdh/Fdo/Fdw", kw: ["K05299", "K15022", "K22516", "K00125", "K22515", "K00123", "K00124"] },
-  "Ack": { label: "Ack", kw: ["K00925"] },
-  "Pta": { label: "Pta", kw: ["K00625"] },
-  "CdhCDE": { label: "CdhCDE\n(ACDS)", kw: ["K00194", "K00193", "K00197"] },
+  "Ack": { label: "Ack", kw: ["K00925", "Ack"] },
+  "Pta": { label: "Pta", kw: ["K00625", "Pta"] },
+  "CdhCDE": { label: "CdhCDE\n(ACDS)", kw: ["K00194", "K00193", "K00197", "CdhC", "CdhD", "CdhE"] },
   "Acs": { label: "Acs", kw: ["K15023", "K14138"] },
-  "Mta": { label: "Mta", kw: ["K14080", "K04480", "K14081"] },
-  "MtmBC": { label: "MtmBC", kw: ["K16176", "K16177"] },
-  "MtbBC": { label: "MtbBC", kw: ["K16178", "K16179"] },
-  "MttBC": { label: "MttBC", kw: ["K14083", "K14084"] },
-  "MtbA": { label: "MtbA", kw: ["K14082"] }
+  "Mta": { label: "Mta", kw: ["K14080", "K04480", "K14081", "MtaA", "MtaB", "MtaC"] },
+  "MtmBC": { label: "MtmBC", kw: ["K16176", "K16177", "MtmB", "MtmC"] },
+  "MtbBC": { label: "MtbBC", kw: ["K16178", "K16179", "MtbB", "MtbC"] },
+  "MttBC": { label: "MttBC", kw: ["K14083", "K14084", "MttB", "MttC"] },
+  "MtbA": { label: "MtbA", kw: ["K14082", "MtbA"] }
 };
 
 // Title element (initially empty)
@@ -679,7 +684,7 @@ window.clearHighlight = function() {
 
 window.fillExample = function() {
   // Example Keywords for testing
-  const examples = ["K00200", "K00580", "K00401", "K03388", "K00925", "Ftr"];
+  const examples = ["K00200", "K00580", "K00401", "K03388", "McrA", "K00925", ];
   document.getElementById("kwInput").value = examples.join(", ");
 }
 

@@ -8,9 +8,9 @@ UI preview:
 ## Usage
 Download the html file in the repository and open it in your web browser (recommended: `Chrome` or `Edge`). You'll find out how to use it as it's simple enough.
 
-This is also hosted online at: [https://silentgene.github.io/pathwiz/methanogenesis_viz.html](./methanogenesis_viz.html)
+This is also hosted GitHub at: [https://silentgene.github.io/pathwiz/methanogenesis_viz.html](./methanogenesis_viz.html)
 
-## The Origin Story (aka My Pain Point)
+## My Pain Point
 
 Every time I get my hands on fresh gene annotations, I face the same existential crisis: mapping those genes onto massive pathway diagrams. It's like trying to find specific LEGO pieces in a giant bin... while blindfolded... in the dark.
 
@@ -20,9 +20,9 @@ No doubt, [KEGG](https://www.genome.jp/kegg/) provides incredibly comprehensive 
 
 During one of my presentations, I proudly showed my supervisor how I'd mapped our genes onto a KEGG pathway, like [this](https://www.kegg.jp/pathway/map00680+M00356). His response?
 
--"This is... very confusing." 
+\- "This is... very confusing." 
 
--*Ouch.* 💔
+\- *Ouch.* 💔
 
 That's when I decided: enough is enough. Time to build something cleaner, simpler, and maybe even enjoyable to use.
 
@@ -64,6 +64,6 @@ Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and le
 - D3.js for data-driven documents and SVG manipulation
 
 > [!NOTE]
-> Pathwiz doesn't rely on any server-side language like `PHP`, `Ruby`, or `Python`. You can just open the HTML file and the web app will run in your browser.
+> Pathwiz is serverless. You can just open the HTML file and the web app will run in your browser.
 
 ...🧙‍♂️🧬
