@@ -446,8 +446,9 @@ const titleNode = svg.append("text")
 
 const g = svg.append("g");
 
-// Arrows
+// Arrows & Fill map (inline colors for compatibility)
 const markerColors = ["#f8991d", "#ef3d39", "#2ab34b", "#6f8ac6", "#555"];
+const CLASS_FILL = { st35: "#ffe8c0", st34: "#cecece", st39: "#fbcccd", st40: "#dad7ec", st38: "#c9e5c7" };
 const defs = svg.append("defs");
 markerColors.forEach(color => {
   const id = `arrow-${color.substring(1)}`;
@@ -458,67 +459,65 @@ markerColors.forEach(color => {
     .attr("refY", 5)
     .attr("markerWidth", 5)
     .attr("markerHeight", 5)
-    .attr("orient", "auto-start-reverse");
+    .attr("orient", "auto")
+    .attr("markerUnits", "strokeWidth");
   m.append("path").attr("d", "M 0 0 L 10 5 L 0 10 z").attr("fill", color);
 });
 
 // Drawing Helpers
 function drawBox(props) {
   let {id, x, y, w, h, label, cls, kw=[], enzyme=true} = props;
-
-  // Merge with external data if available
   if (typeof methanogenesisData !== 'undefined' && methanogenesisData[id]) {
     const data = methanogenesisData[id];
     if (data.label) label = data.label;
     if (data.kw) kw = data.kw;
   }
-
-  const classes = [cls||''];
-  if (enzyme) classes.push('enzyme');
-  const ng = g.append("g").attr("class", classes.join(' ').trim()).attr("id", id);
-  ng.append("rect").attr("x", x).attr("y", y).attr("width", w).attr("height", h);
-  const lines = String(label || id).split(/\n/);
-  const lineHeight = 14;
-  const txt = ng.append("text")
-    .attr("text-anchor", "middle")
-    .attr("class", "label")
-    .attr("x", x + w/2)
-    .attr("y", y + h/2)
-    .attr("dominant-baseline", "middle");
-  lines.forEach((ln, i) => {
-    const t = txt.append("tspan").text(ln).attr("x", x + w/2);
-    if (i === 0) t.attr("dy", `${-((lines.length - 1) / 2) * lineHeight}`);
-    else t.attr("dy", `${lineHeight}`);
-  });
-  const tooltip = [label || id, kw.length ? ` [${kw.join(', ')}]` : ''].join('');
-  ng.append('title').text(tooltip);
-  ng.attr("data-kw", kw.join(","));
+  const classes = [cls||'']; if (enzyme) classes.push('enzyme');
+  const ng = g.append("g").attr("class", classes.join(' ').trim()).attr("id", id).attr("data-kw", kw.join(","));
+  const rect = ng.append("rect")
+    .attr("x", x).attr("y", y).attr("width", w).attr("height", h)
+    .attr("rx", enzyme?6:null).attr("ry", enzyme?6:null)
+    .attr("stroke", enzyme?"#444":null).attr("stroke-width", enzyme?1:null);
+  if (cls && CLASS_FILL[cls]) rect.attr("fill", CLASS_FILL[cls]);
+  const lines = String(label||id).split(/\n/); const lh=14;
+  const txt = ng.append("text").attr("x", x+w/2).attr("y", y+h/2)
+    .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+    .attr("font-family", "Arial, sans-serif").attr("font-size", 14).attr("fill", "#222");
+  lines.forEach((ln,i)=>{ const t=txt.append("tspan").attr("x", x+w/2).text(ln); t.attr("dy", i===0?`${-((lines.length-1)/2)*lh}`:lh); });
+  ng.append('title').text([label||id, kw.length?` [${kw.join(', ')}]`:''].join(''));
 }
 
 function drawText({x,y,text,cls="label"}) {
   const lines = String(text).split(/\n/);
-  const el = g.append("text").attr("x", x).attr("y", y).attr("class", cls);
-  
-  let lineHeight = 14;
-  if (cls && /big-label/.test(cls)) lineHeight = 18;
-  else if (cls && /small-label/.test(cls)) lineHeight = 12;
-  
-  el.attr("dominant-baseline", "middle");
-  
-  lines.forEach((ln, i) => {
-    const t = el.append("tspan").attr("x", x);
-    if (i === 0) t.attr("dy", `${-((lines.length - 1) / 2) * lineHeight}`);
-    else t.attr("dy", `${lineHeight}`);
-    
-    const parts = ln.split(/(<sub>.*?<\/sub>)/g);
+  let size=14, fill="#222", weight="400", anchor="start";
+  if (/big-label/.test(cls)) { size=18; fill="#000"; weight="700"; anchor="middle"; }
+  if (/small-label/.test(cls)) { size=11; fill="#555"; }
+  const el = g.append("text")
+    .attr("x", x).attr("y", y)
+    .attr("font-family", "Arial, sans-serif")
+    .attr("font-size", size).attr("font-weight", weight)
+    .attr("fill", fill).attr("text-anchor", anchor)
+    .attr("dominant-baseline", "middle");
+  const lh = size;
+  lines.forEach((ln,i)=>{
+    const lineSpan = el.append("tspan").attr("x", x).attr("dy", i===0?`${-((lines.length-1)/2)*lh}`:lh);
+    const parts = ln.split(/(<sub>.*?<\/sub>)/g).filter(Boolean);
+    let pendingRestore = false;
+    const subDy = Math.round(size*0.25);
     parts.forEach(part => {
-      if (part.startsWith("<sub>") && part.endsWith("</sub>")) {
-        t.append("tspan")
-         .attr("baseline-shift", "sub")
-         .attr("font-size", "0.7em")
-         .text(part.replace(/<\/?sub>/g, ""));
-      } else if (part) {
-        t.append("tspan").text(part);
+      if (/^<sub>.*<\/sub>$/.test(part)) {
+        const subTxt = part.replace(/<\/?sub>/g, "");
+        lineSpan.append("tspan")
+          .attr("font-size", Math.round(size*0.65))
+          .attr("dy", subDy)
+          .text(subTxt);
+        pendingRestore = true; // next normal segment should lift baseline
+      } else {
+        const t = lineSpan.append("tspan").text(part);
+        if (pendingRestore) {
+          t.attr("dy", -subDy).attr("font-size", size);
+          pendingRestore = false;
+        }
       }
     });
   });
@@ -548,20 +547,15 @@ function drawPath({d, color, width=2, arrow=true}) {
 }
 
 function drawPill({x, y, w, h, label, cls}) {
-  const classes = ["pill", cls || ""].join(" ").trim();
   const ng = g.append("g").attr("class", "pill-group");
-  ng.append("rect")
-    .attr("x", x).attr("y", y)
-    .attr("width", w).attr("height", h)
-    .attr("class", classes)
-    .attr("rx", 15).attr("ry", 15);
+  const rect = ng.append("rect")
+    .attr("x", x).attr("y", y).attr("width", w).attr("height", h)
+    .attr("rx", 15).attr("ry", 15).attr("stroke", "none").attr("opacity", 0.9);
+  rect.attr("fill", (cls && CLASS_FILL[cls])?CLASS_FILL[cls]:"#ffffff");
   ng.append("text")
-    .attr("x", x + w/2)
-    .attr("y", y + h/2)
-    .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "middle")
-    .attr("class", "label")
-    .text(label);
+    .attr("x", x+w/2).attr("y", y+h/2).attr("text-anchor", "middle")
+    .attr("dominant-baseline", "middle").attr("font-family", "Arial, sans-serif")
+    .attr("font-size", 14).attr("fill", "#222").text(label);
   return ng;
 }
 
@@ -570,24 +564,24 @@ drawPill({x:298, y:43, w:129, h:32, label:"Hydrogenotrophic", cls:"st35"});
 drawPill({x:124, y:189, w:100, h:32, label:"Acetoclastic", cls:"st39"});
 drawPill({x:70, y:423, w:110, h:32, label:"Methylotrophic", cls:"st40"});
 
-drawText({x:345.36, y:92, text:"CO<sub>2</sub>", cls:"big-label"});
-drawText({x:219, y:110, text:"CO", cls:"big-label"});
-drawText({x:510, y:110, text:"formate", cls:"big-label"});
-drawText({x:370, y:169.21, text:"formyl-MF"});
-drawText({x:370, y:217, text:"formyl-H<sub>4</sub>SPt"});
-drawText({x:370, y:266, text:"methenyl-H<sub>4</sub>SPt"});
-drawText({x:370, y:316, text:"methylene-H<sub>4</sub>SPt"});
+drawText({x:360, y:92, text:"CO<sub>2</sub>", cls:"big-label"});
+drawText({x:230, y:111, text:"CO", cls:"big-label"});
+drawText({x:546, y:111, text:"formate", cls:"big-label"});
+drawText({x:370, y:165, text:"formyl-MF"});
+drawText({x:370, y:214, text:"formyl-H<sub>4</sub>SPt"});
+drawText({x:370, y:260, text:"methenyl-H<sub>4</sub>SPt"});
+drawText({x:370, y:312, text:"methylene-H<sub>4</sub>SPt"});
 drawText({x:370, y:365, text:"methyl-H<sub>4</sub>SPt"});
-drawText({x:370, y:419, text:"methyl-CoM"});
-drawText({x:342.07, y:550, text:"CH<sub>4</sub>", cls:"big-label"});
+drawText({x:370, y:416, text:"methyl-CoM"});
+drawText({x:360, y:550, text:"CH<sub>4</sub>", cls:"big-label"});
 drawText({x:419, y:452, text:"CoB-SH\nCoM-SH"});
 drawText({x:407, y:515, text:"CoM-S-S-CoB"});
-drawText({x:405, y:133, text:"Fd<sub>red2-</sub>", cls:"small-label"});
-drawText({x:397, y:152, text:"Fd<sub>dox</sub>", cls:"small-label"});
-drawText({x:423, y:280, text:"F420H<sub>2</sub>", cls:"small-label"});
-drawText({x:408, y:300, text:"F420+2H<sub>2</sub>", cls:"small-label"});
-drawText({x:406, y:333, text:"F420H<sub>2</sub>", cls:"small-label"});
-drawText({x:399, y:349, text:"F420+2H<sub>2</sub>", cls:"small-label"});
+drawText({x:407, y:133, text:"Fd<sub>red2-</sub>", cls:"small-label"});
+drawText({x:400, y:150, text:"Fd<sub>dox</sub>", cls:"small-label"});
+drawText({x:425, y:278, text:"F<sub>420</sub>H<sub>2</sub>", cls:"small-label"});
+drawText({x:408, y:298, text:"F<sub>420</sub>+2H<sub>2</sub>", cls:"small-label"});
+drawText({x:408, y:328, text:"F<sub>420</sub>H<sub>2</sub>", cls:"small-label"});
+drawText({x:395, y:349, text:"F<sub>420</sub>+2H<sub>2</sub>", cls:"small-label"});
 
 const orange = "#f8991d";
 drawLine({x1:360,y1:110,x2:360,y2:520,color:orange});
@@ -652,13 +646,14 @@ drawText({x:40, y:541, text:"dimethylamine"});
 drawText({x:35,  y:569,  text:"trimethylamine"});
 
 // Three orange curved paths (left)
-drawPath({ d: "M405.81,293.51c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
-drawPath({ d: "M390.46,147.06c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
-drawPath({ d: "M389.91,343.97c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
+drawPath({ d: "M391,343.97c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
+drawPath({ d: "M407,293.51c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
+drawPath({ d: "M391,147.06c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.39-9.32", color: orange });
+
 // Three orange curved paths (right)
-drawPath({ d: "M446.9,131.18c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
-drawPath({ d: "M457.32,329.19c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
-drawPath({ d: "M472.68,279.27c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
+drawPath({ d: "M444,131.18c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
+drawPath({ d: "M454,329.19c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
+drawPath({ d: "M470.68,279.27c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
 
 // Logic
 window.updateTitle = function() {
@@ -719,14 +714,241 @@ function getSafeFilename(ext) {
 
 function getSvgData() {
   const svgEl = document.getElementById("svg");
+  const clone = svgEl.cloneNode(true);
+  
+  // Remove debug layer from clone
+  const debugLayer = clone.querySelector("#debug-layer");
+  if (debugLayer) {
+    debugLayer.remove();
+  }
+
+  // Fix for Illustrator: Bake Grayscale colors (later) and convert marker arrows to explicit triangles
+  if (svgEl.classList.contains("grayscale-active")) {
+    
+    // 1. Add a gray marker
+    const defs = clone.querySelector("defs");
+    if (defs) {
+      const grayMarker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+      grayMarker.setAttribute("id", "arrow-gray");
+      grayMarker.setAttribute("viewBox", "0 0 10 10");
+      grayMarker.setAttribute("refX", "8");
+      grayMarker.setAttribute("refY", "5");
+      grayMarker.setAttribute("markerWidth", "5");
+      grayMarker.setAttribute("markerHeight", "5");
+      grayMarker.setAttribute("orient", "auto");
+      grayMarker.setAttribute("markerUnits", "strokeWidth");
+      
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
+      path.setAttribute("fill", "#888888"); // Gray color
+      grayMarker.appendChild(path);
+      defs.appendChild(grayMarker);
+    }
+
+    // 2. Helper for color conversion
+    const toGray = (color) => {
+      if (!color || color === "none" || color === "transparent") return color;
+      // Handle hex
+      if (color.startsWith("#")) {
+        let r, g, b;
+        const hex = color.substring(1);
+        if (hex.length === 3) {
+          r = parseInt(hex[0]+hex[0], 16);
+          g = parseInt(hex[1]+hex[1], 16);
+          b = parseInt(hex[2]+hex[2], 16);
+        } else {
+          r = parseInt(hex.substring(0,2), 16);
+          g = parseInt(hex.substring(2,4), 16);
+          b = parseInt(hex.substring(4,6), 16);
+        }
+        const gray = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+        return `rgb(${gray},${gray},${gray})`;
+      }
+      // Handle rgb
+      if (color.startsWith("rgb")) {
+        const parts = color.match(/\d+/g);
+        if (parts) {
+          const r = parseInt(parts[0]);
+          const g = parseInt(parts[1]);
+          const b = parseInt(parts[2]);
+          const gray = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+          return `rgb(${gray},${gray},${gray})`;
+        }
+      }
+      return color;
+    };
+
+    // 3. Traverse and update
+    const mainG = clone.querySelector("g");
+    if (mainG) {
+      const allElements = mainG.querySelectorAll("*");
+      allElements.forEach(el => {
+        // Check if this element or any ancestor has .highlight
+        if (el.closest(".highlight")) return;
+        if (el.closest(".pill-group")) return;
+
+        // Convert Fill
+        const fill = el.getAttribute("fill") || el.style.fill;
+        if (fill) el.setAttribute("fill", toGray(fill));
+        
+        // Convert Stroke
+        const stroke = el.getAttribute("stroke") || el.style.stroke;
+        if (stroke) el.setAttribute("stroke", toGray(stroke));
+        
+        // Convert Marker
+        const markerEnd = el.getAttribute("marker-end");
+        if (markerEnd && markerEnd !== "none") {
+          el.setAttribute("marker-end", "url(#arrow-gray)");
+        }
+      });
+    }
+    
+    clone.classList.remove("grayscale-active");
+  }
+
+  // --- Convert marker-based arrows to explicit paths ---
+  (function replaceMarkers() {
+    // Remove marker definitions entirely
+    const defs = clone.querySelector('defs');
+    if (defs) {
+      Array.from(defs.querySelectorAll('marker')).forEach(m => m.remove());
+    }
+    // Helper to build triangle path from tip and direction
+    function makeArrowPath(tipX, tipY, fromX, fromY, strokeColor) {
+      const dx = tipX - fromX;
+      const dy = tipY - fromY;
+      const len = Math.max(Math.hypot(dx, dy), 0.0001);
+      const ux = dx / len;
+      const uy = dy / len;
+      const size = 9; // arrow length (base to apex)
+      const width = 5; // arrow half-width
+      const advance = 2; // push apex forward beyond original line end to cover stroke
+      const apexX = tipX + ux * advance;
+      const apexY = tipY + uy * advance;
+      const baseX = apexX - ux * size;
+      const baseY = apexY - uy * size;
+      const px = -uy;
+      const py = ux;
+      const leftX = baseX + px * width;
+      const leftY = baseY + py * width;
+      const rightX = baseX - px * width;
+      const rightY = baseY - py * width;
+      const d = `M ${apexX} ${apexY} L ${leftX} ${leftY} L ${rightX} ${rightY} Z`;
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d', d);
+      path.setAttribute('fill', strokeColor || '#333');
+      path.setAttribute('stroke', 'none');
+      return path;
+    }
+    // Lines
+    Array.from(clone.querySelectorAll('line[marker-end]')).forEach(line => {
+      const x1 = parseFloat(line.getAttribute('x1'));
+      const y1 = parseFloat(line.getAttribute('y1'));
+      const x2 = parseFloat(line.getAttribute('x2'));
+      const y2 = parseFloat(line.getAttribute('y2'));
+      const stroke = line.getAttribute('stroke') || '#333';
+      line.removeAttribute('marker-end');
+      const arrow = makeArrowPath(x2, y2, x1, y1, stroke);
+      line.parentNode.appendChild(arrow);
+    });
+    // Paths
+    Array.from(clone.querySelectorAll('path[marker-end]')).forEach(p => {
+      try {
+        const stroke = p.getAttribute('stroke') || '#333';
+        const total = p.getTotalLength();
+        const tip = p.getPointAtLength(total);
+        const prev = p.getPointAtLength(Math.max(total - 0.1, 0));
+        p.removeAttribute('marker-end');
+        const arrow = makeArrowPath(tip.x, tip.y, prev.x, prev.y, stroke);
+        p.parentNode.appendChild(arrow);
+      } catch (e) {
+        p.removeAttribute('marker-end');
+      }
+    });
+  })();
+
   const serializer = new XMLSerializer();
-  let source = serializer.serializeToString(svgEl);
-  
-  // Only get the SVG specific styles
-  const styles = document.getElementById("svg-styles").innerText;
-  
+  // Flatten any baseline-shift subscripts for Illustrator
+  Array.from(clone.querySelectorAll('tspan[baseline-shift]')).forEach(ts => {
+    const parentSize = parseInt(ts.parentNode.getAttribute('font-size')) || 14;
+    const subText = ts.textContent;
+    ts.removeAttribute('baseline-shift');
+    ts.removeAttribute('font-size');
+    ts.setAttribute('font-size', Math.round(parentSize * 0.65));
+    ts.setAttribute('dy', Math.round(parentSize * 0.25));
+    // Add a spacer tspan to restore baseline for following siblings
+    const restore = document.createElementNS('http://www.w3.org/2000/svg','tspan');
+    restore.setAttribute('font-size', parentSize);
+    restore.setAttribute('dy', Math.round(-parentSize * 0.25));
+    ts.after(restore);
+  });
+
+  // Remove style classes for fills already inlined; keep minimal highlight styling (no filters)
+  const styleEl = clone.querySelector('#svg-styles');
+  if (styleEl) {
+    styleEl.textContent = '.highlight rect,.highlight circle,.highlight path,.highlight line{stroke:#e74c3c;stroke-width:4;}';
+  }
+
+  // --- Recalculate vertical centering for box and pill text (Illustrator baseline differences) ---
+  (function fixBoxPillTextVerticalAlignment() {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const groups = Array.from(clone.querySelectorAll('g.enzyme, g.pill-group'));
+    groups.forEach(gr => {
+      const rect = gr.querySelector('rect');
+      const text = gr.querySelector('text');
+      if (!rect || !text) return;
+      // Gather top-level line tspans (ignore nested tspans for subscripts which boxes/pills don't use)
+      let lineSpans = Array.from(text.childNodes).filter(n => n.nodeName === 'tspan');
+      const fontSize = parseInt(text.getAttribute('font-size')) || 14;
+      const rectY = parseFloat(rect.getAttribute('y'));
+      const rectH = parseFloat(rect.getAttribute('height'));
+      // If pill text has no tspans (drawPill uses .text()), treat the whole textContent as one line
+      if (gr.classList.contains('pill-group') && lineSpans.length === 0 && text.textContent) {
+        const centerX = parseFloat(rect.getAttribute('x')) + parseFloat(rect.getAttribute('width')) / 2;
+        // Allow per-pill override via data-pill-shift (in font-size units). If present, use that; else default factor.
+        const override = gr.getAttribute('data-pill-shift');
+        const PILL_SINGLELINE_BASELINE_FACTOR = override ? parseFloat(override) : 0.30; // was 0.40; 0.30 raises text further
+        const baseline1 = rectY + rectH / 2 + fontSize * PILL_SINGLELINE_BASELINE_FACTOR;
+        text.removeAttribute('dominant-baseline');
+        text.setAttribute('x', centerX);
+        text.setAttribute('y', baseline1);
+        return; // done for this pill
+      }
+      if (!lineSpans.length) return; // no adjustment needed otherwise
+      const lineCount = lineSpans.length;
+      const blockHeight = lineCount * fontSize;
+      // Different treatment for pill single-line labels (Illustrator renders baseline higher)
+      let baseline1;
+      if (gr.classList.contains('pill-group') && lineCount === 1) {
+        // Parameterized downward adjustment for pill single-line text; lowered to 0.30 to raise text.
+        const override = gr.getAttribute('data-pill-shift');
+        const PILL_SINGLELINE_BASELINE_FACTOR = override ? parseFloat(override) : 0.30; // previous 0.40
+        baseline1 = rectY + rectH / 2 + fontSize * PILL_SINGLELINE_BASELINE_FACTOR;
+      } else {
+        // Approximate baseline offset factor (empirical for Arial): 0.80 * fontSize from top of first line box
+        const baselineOffset = fontSize * 0.80;
+        baseline1 = rectY + (rectH - blockHeight) / 2 + baselineOffset;
+      }
+      const centerX = parseFloat(rect.getAttribute('x')) + parseFloat(rect.getAttribute('width')) / 2;
+      // Rebuild tspans with explicit stacking (remove previous dy strategy & dominant-baseline)
+      text.removeAttribute('dominant-baseline');
+      const originalLines = lineSpans.map(ts => ts.textContent);
+      while (text.firstChild) text.removeChild(text.firstChild);
+      text.setAttribute('x', centerX);
+      text.setAttribute('y', baseline1);
+      originalLines.forEach((ln, i) => {
+        const tspan = document.createElementNS(SVG_NS, 'tspan');
+        tspan.setAttribute('x', centerX);
+        tspan.setAttribute('dy', i === 0 ? '0' : String(fontSize));
+        tspan.textContent = ln;
+        text.appendChild(tspan);
+      });
+    });
+  })();
+
+  let source = serializer.serializeToString(clone);
   if(!source.match(/<style/)) {
-      source = source.replace('>', `><style>${styles}</style>`);
+    source = source.replace('>', '><style>.highlight rect,.highlight circle,.highlight path,.highlight line{stroke:#e74c3c;stroke-width:4;}</style>');
   }
   return source;
 }
