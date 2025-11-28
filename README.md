@@ -15,7 +15,7 @@ This is also hosted on GitHub at: [https://silentgene.github.io/pathwiz/methanog
 
 Every time I get my hands on fresh gene annotations, I face the same existential crisis: mapping those genes onto massive pathway diagrams. It's like trying to find specific LEGO pieces in a giant bin... while blindfolded... in the dark.
 
-Take methanogenesis, for example. Dozens of genes functioning in this pathway, giving me a headache everytime. 🌀
+Take methanogenesis for example. Dozens of genes function in this pathway, giving me a headache everytime. 🌀
 
 No doubt, [KEGG](https://www.genome.jp/kegg/) provides incredibly comprehensive pathway maps, and I'm genuinely grateful for their work. But let's be honest: their complexity level often lands somewhere between "mildly terrifying" and "please make it stop." 
 
