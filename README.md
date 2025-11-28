@@ -70,4 +70,11 @@ Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and le
 > [!NOTE]
 > Pathwiz is serverless. You can just open the HTML file and the web app will run in your browser.
 
+## Citation
+Pathwiz has not been formally published yet. If you use Pathwiz in your research, please cite it as:
+
+```
+Lin, H. (2025). Pathwiz (Version 0.5) [Web application]. Available at https://github.com/SilentGene/pathwiz
+```
+
 ...🧙‍♂️🧬
