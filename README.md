@@ -10,7 +10,7 @@ UI preview:
 ## Usage
 Download the html file in the repository and open it in your web browser (recommended: `Chrome` or `Edge`). You'll find out how to use it as it's simple enough.
 
-This is also hosted on GitHub at: [https://silentgene.github.io/pathwiz/pathwiz_draw.html](https://silentgene.github.io/pathwiz/pathwiz_draw.html)
+This is also hosted on GitHub at: [https://silentgene.github.io/pathwiz/index.html](https://silentgene.github.io/pathwiz/index.html)
 
 ## My Pain Point
 
