@@ -1,4 +1,4 @@
-![Pathwiz Logo](resources/logo.jpg)
+![Pathwiz Logo](resources/logo.svg)
 # Pathwiz
 
 A web app to create simplified pathway visualizations for environmental microbiology.
