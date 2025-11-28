@@ -1,5 +1,5 @@
 // Data Definition
-const pathwayData = {
+window.pathwayData = {
   "Fwd": { label: "Fwd", kw: ["K00202", "K00200", "K00201", "K00203", "K00204", "K00205", "K11261", "K11260", "FwdA"] },
   "Ftr": { label: "Ftr", kw: ["K00672", "Ftr"] },
   "Mch": { label: "Mch", kw: ["K01499", "Mch"] },
@@ -27,7 +27,7 @@ const pathwayData = {
 // Example Keywords for testing
 window.exampleKeywords = ["K00200", "K00580", "K00401", "K03388", "McrA", "K00925"];
 
-// Drawing
+window.drawPathway = function() {
 drawPill({x:298, y:43, w:129, h:32, label:"Hydrogenotrophic", cls:"st35"});
 drawPill({x:90, y:189, w:100, h:32, label:"Acetoclastic", cls:"st39"});
 drawPill({x:70, y:423, w:110, h:32, label:"Methylotrophic", cls:"st40"});
@@ -123,3 +123,9 @@ drawPath({ d: "M391,147.06c-6.1-1.64-10.17-4.58-10.17-7.94,0-5.15,9.58-9.32,21.3
 drawPath({ d: "M444,131.18c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
 drawPath({ d: "M454,329.19c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
 drawPath({ d: "M470.68,279.27c6.1,1.64,10.17,4.58,10.17,7.94,0,5.15-9.58,9.32-21.39,9.32", color: orange });
+};
+
+// Execute immediately
+if (typeof window.drawPathway === 'function') {
+    window.drawPathway();
+}

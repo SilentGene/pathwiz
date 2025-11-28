@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Pathwiz - Methanogenesis</title>
+  <title>Pathwiz - Biogeochemical Pathway Visualization</title>
   <link rel="icon" type="image/x-icon" href="resources/logo_32x32.png">
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <link rel="stylesheet" href="css/pathwiz.css">
@@ -12,11 +12,19 @@
 
 <div class="app-container">
   
-  <!-- 左侧边栏 -->
+  <!-- Left Sidebar -->
   <div class="sidebar">
     <div>
       <h2>Pathwiz</h2>
-      <p class="description">Methanogenesis pathway from CO₂, Acetate, and Methyl-compounds.</p>
+      <p class="description">Gain insights into biogeochemical cycles through simplified and elegant pathway visualizations.</p>
+    </div>
+
+    <div class="input-group">
+      <label for="pathwaySelect">Select Pathway</label>
+      <select id="pathwaySelect" onchange="loadPathway(this.value)">
+        <option value="" disabled selected>-- Select a Pathway --</option>
+        <option value="js/methanogenesis.js">Methanogenesis</option>
+      </select>
     </div>
 
     <div class="input-group">
@@ -57,7 +65,7 @@
       </label>
     </div>
 
-    <!-- 导出按钮区域 -->
+    <!-- Export Buttons Area -->
     <div class="input-group" style="margin-top: 10px;">
       <label>Export Figure</label>
       <div class="btn-row">
@@ -92,15 +100,39 @@
     </div>
   </div>
 
-  <!-- 右侧图表区 -->
+  <!-- Right Main Content Area -->
   <div class="main-content">
-    <svg id="svg" viewBox="0 0 640.67 589.39" preserveAspectRatio="xMidYMid meet"></svg>
+    <svg id="svg" viewBox="0 0 640.67 589.39" preserveAspectRatio="xMidYMid meet">
+      <g id="initial-state">
+        <image href="resources/logo.jpg" x="220" y="150" width="200" height="200" opacity="0.5" />
+        <text x="320" y="400" text-anchor="middle" font-family="Arial" font-size="20" fill="#999">Select a pathway from the menu</text>
+      </g>
+    </svg>
   </div>
 
 </div>
 
 
 <script src="js/pathwiz.js"></script>
-<script src="js/methanogenesis.js"></script>
+<script>
+  function loadPathway(scriptPath) {
+    if (!scriptPath) return;
+    
+    // Clear existing pathway
+    if (typeof clearPathway === 'function') {
+      clearPathway();
+    }
+    
+    // Create and append new script
+    const script = document.createElement('script');
+    script.src = scriptPath;
+    
+    script.onload = function() {
+      console.log("Loaded " + scriptPath);
+    };
+    
+    document.body.appendChild(script);
+  }
+</script>
 </body>
 </html>

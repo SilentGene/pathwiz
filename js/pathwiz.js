@@ -34,6 +34,14 @@ markerColors.forEach(color => {
 });
 
 // Drawing Helpers
+window.clearPathway = function() {
+  g.selectAll("*").remove();
+  d3.select("#svg-title").text("");
+  d3.select("#initial-state").remove();
+  window.pathwayData = {};
+  window.exampleKeywords = [];
+}
+
 function drawBox(props) {
   let {id, x, y, w, h, label, cls, kw=[], enzyme=true} = props;
   // Check for global pathwayData
