@@ -9,7 +9,7 @@ UI preview:
 ## Usage
 Download the html file in the repository and open it in your web browser (recommended: `Chrome` or `Edge`). You'll find out how to use it as it's simple enough.
 
-This is also hosted on GitHub at: [https://silentgene.github.io/pathwiz/methanogenesis_viz.html](https://silentgene.github.io/pathwiz/methanogenesis_viz.html)
+This is also hosted on GitHub at: [https://silentgene.github.io/pathwiz/pathwiz_draw.html](https://silentgene.github.io/pathwiz/pathwiz_draw.html)
 
 ## My Pain Point
 
@@ -71,6 +71,7 @@ Got ideas? Want to see a specific pathway implemented ASAP? Drop an issue and le
 > Pathwiz is serverless. You can just open the HTML file and the web app will run in your browser.
 
 ## Citation
+
 Pathwiz has not been formally published yet. If you use Pathwiz in your research, please cite it as:
 
 ```
