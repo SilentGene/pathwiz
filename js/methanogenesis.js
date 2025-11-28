@@ -15,7 +15,7 @@ window.pathwayData = {
   "Fdh_Fdo_Fdw": { label: "Fdh/Fdo/Fdw", kw: ["K05299", "K15022", "K22516", "K00125", "K22515", "K00123", "K00124"] },
   "Ack": { label: "Ack", kw: ["K00925", "Ack"] },
   "Pta": { label: "Pta", kw: ["K00625", "Pta"] },
-  "CdhCDE": { label: "CdhCDE\n(ACDS)", kw: ["K00194", "K00193", "K00197", "CdhC", "CdhD", "CdhE"] },
+  "CdhCDE": { label: "CdhCDE\n(ACDS)", kw: ["K00193", "K00194", "K00197", "CdhC", "CdhD", "CdhE"] },
   "Acs": { label: "Acs", kw: ["K15023", "K14138"] },
   "Mta": { label: "Mta", kw: ["K14080", "K04480", "K14081", "MtaA", "MtaB", "MtaC"] },
   "MtmBC": { label: "MtmBC", kw: ["K16176", "K16177", "MtmB", "MtmC"] },
