@@ -627,11 +627,11 @@ function drawPill({x, y, w, h, label, cls}) {
 
 // Drawing
 drawPill({x:298, y:43, w:129, h:32, label:"Hydrogenotrophic", cls:"st35"});
-drawPill({x:124, y:189, w:100, h:32, label:"Acetoclastic", cls:"st39"});
+drawPill({x:90, y:189, w:100, h:32, label:"Acetoclastic", cls:"st39"});
 drawPill({x:70, y:423, w:110, h:32, label:"Methylotrophic", cls:"st40"});
 
 drawText({x:360, y:92, text:"CO<sub>2</sub>", cls:"big-label"});
-drawText({x:190, y:111, text:"CO", cls:"big-label"});
+drawText({x:230, y:111, text:"CO", cls:"big-label"});
 drawText({x:546, y:111, text:"formate", cls:"big-label"});
 drawText({x:370, y:165, text:"formyl-MF"});
 drawText({x:370, y:214, text:"formyl-H<sub>4</sub>SPt"});
@@ -672,26 +672,26 @@ drawBox({id:"Fpo1",x:486.14, y:278.44, w:28.32, h:15.91, cls:"st34", enzyme:true
 drawBox({id:"Fpo2",x:469.68, y:327.8,  w:28.32, h:15.91, cls:"st34", enzyme:true});
 drawBox({id:"MvhADG_HdrABC", x:488.33, y:459.99, w:71.3, h:32, cls:"st35", enzyme:true});
 
-drawLine({x1:219, y1:109, x2:354, y2:109, color:"#ef3d39"});
+drawLine({x1:256, y1:109, x2:354, y2:109, color:"#ef3d39"});  // CO2 to CO
 drawLine({x1:496, y1:109, x2:367, y2:109, color:"#2ab34b"});
-drawBox({id:"CdhAB_CooSF", x:260, y:90, w:53.2, h:36.75, cls:"st39", enzyme:true});
+drawBox({id:"CdhAB_CooSF", x:270, y:90, w:53.2, h:36.75, cls:"st39", enzyme:true});
 drawBox({id:"Fdh_Fdo_Fdw", x:388.32, y:98, w:101.47, h:22.49, cls:"st38", enzyme:true});
-drawRing({cx:215, cy:109, color:"#ef3d39"});  // CO
+drawRing({cx:251, cy:109, color:"#ef3d39"});  // CO
 drawRing({cx:501, cy:109, color:"#2ab34b"});  // formate
 
 const red = "#ef3d39";
-drawLine({x1:188,y1:251,x2:188,y2:349,color:red});
-drawLine({x1:192, y1:358, x2:355, y2:358, color:red});
-drawLine({x1:286, y1:340, x2:286, y2:129, color:red, arrow:true});
-drawPath({ d: "M192,247c27.18,2.9,48.35,25.9,48.35,53.85,0,23.94-15.54,44.26-46,55", color: red, width: 2, arrow: true });
-[247, 298, 357].forEach(y => drawRing({cx:188, cy:y, color:red}));
-drawBox({id:"Ack", x:168.57, y:265.05, w:40.04, h:22.49, cls:"st39", enzyme:true});
-drawBox({id:"Pta", x:168.85, y:309.48, w:40.04, h:22.49, cls:"st39", enzyme:true});
-drawBox({id:"CdhCDE", x:252, y:340, w:66.37, h:33.46, cls:"st39", enzyme:true});
-drawBox({id:"Acs", x:219, y:290, w:40.04, h:22.49, cls:"st39", enzyme:true});
-drawText({x:130, y:249, text:"acetate"});
-drawText({x:122, y:304, text:"acetyl-Pi"});
-drawText({x:110, y:363, text:"acetyl-CoA"});
+drawLine({x1:153,y1:251,x2:153,y2:349,color:red});
+drawLine({x1:157, y1:358, x2:353, y2:358, color:red});
+drawLine({x1:251, y1:340, x2:251, y2:116, color:red, arrow:true});
+drawPath({ d: "M157,247c27.18,2.9,48.35,25.9,48.35,53.85,0,23.94-15.54,44.26-46,55", color: red, width: 2, arrow: true });
+[247, 298, 357].forEach(y => drawRing({cx:153, cy:y, color:red}));
+drawBox({id:"Ack", x:133.57, y:265.05, w:40.04, h:22.49, cls:"st39", enzyme:true});
+drawBox({id:"Pta", x:133.85, y:309.48, w:40.04, h:22.49, cls:"st39", enzyme:true});
+drawBox({id:"CdhCDE", x:217, y:340, w:66.37, h:33.46, cls:"st39", enzyme:true});
+drawBox({id:"Acs", x:184, y:290, w:40.04, h:22.49, cls:"st39", enzyme:true});
+drawText({x:95, y:249, text:"acetate"});
+drawText({x:87, y:304, text:"acetyl-Pi"});
+drawText({x:75, y:363, text:"acetyl-CoA"});
 
 const blue = "#6f8ac6";
 [482, 510, 538, 566].forEach(y => drawRing({cx:143, cy:y, color:blue}));
