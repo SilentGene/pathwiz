@@ -15,13 +15,13 @@
   <!-- Left Sidebar -->
   <div class="sidebar">
     <div>
-      <h2>Pathwiz</h2>
+      <h1><a href="index.html" style="text-decoration: none; color: inherit;">Pathwiz</a></h1>
       <p class="description">Gain insights into biogeochemical cycles through simplified and elegant pathway visualizations.</p>
     </div>
 
     <div class="input-group">
       <label for="pathwaySelect">Select Pathway</label>
-      <select id="pathwaySelect" onchange="loadPathway(this.value)">
+      <select id="pathwaySelect" class="attention-pulse" onchange="loadPathway(this.value)" onfocus="removeAttention()">
         <option value="" disabled selected>-- Select a Pathway --</option>
         <option value="js/methanogenesis.js">Methanogenesis</option>
       </select>
@@ -104,8 +104,8 @@
   <div class="main-content">
     <svg id="svg" viewBox="0 0 640.67 589.39" preserveAspectRatio="xMidYMid meet">
       <g id="initial-state">
-        <image href="resources/logo.svg" x="220" y="150" width="200" height="200" opacity="0.5" />
-        <text x="320" y="400" text-anchor="middle" font-family="Arial" font-size="20" fill="#999">Select a pathway from the menu</text>
+        <image href="resources/logo.svg" x="220" y="150" width="200" height="200" opacity="0.5" class="logo-animate" />
+        <text x="320" y="400" text-anchor="middle" font-family="Arial" font-size="16" fill="#999">Select a pathway from the left to begin</text>
       </g>
     </svg>
   </div>
@@ -115,7 +115,16 @@
 
 <script src="js/pathwiz.js"></script>
 <script>
+  function removeAttention() {
+    const select = document.getElementById('pathwaySelect');
+    if (select) {
+      select.classList.remove('attention-pulse');
+      select.removeAttribute('onfocus'); // Remove listener after first use
+    }
+  }
+
   function loadPathway(scriptPath) {
+    removeAttention(); // Ensure it's removed on change as well
     if (!scriptPath) return;
     
     // Clear existing pathway
